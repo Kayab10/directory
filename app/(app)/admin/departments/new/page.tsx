@@ -32,7 +32,7 @@ export default async function NewDepartmentPage({
     <div>
       <PageHeader
         crumbs={[
-          { label: "Sectors", href: "/" },
+          { label: "Sectors", href: "/sectors" },
           { label: sector.name, href: `/sectors/${sector.slug}` },
           ...(parent ? [{ label: parent.name, href: `/departments/${parent.id}` }] : []),
         ]}

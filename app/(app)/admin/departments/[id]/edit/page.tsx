@@ -23,7 +23,7 @@ export default async function EditDepartmentPage({ params }: { params: Promise<{
     <div>
       <PageHeader
         crumbs={[
-          { label: "Sectors", href: "/" },
+          { label: "Sectors", href: "/sectors" },
           { label: dept.sector.name, href: `/sectors/${dept.sector.slug}` },
           ...(dept.parent ? [{ label: dept.parent.name, href: `/departments/${dept.parent.id}` }] : []),
           { label: dept.name, href: `/departments/${dept.id}` },

@@ -63,6 +63,7 @@ model Department {
   mapUrl        String?
   website       String?
 
+  ministerName    String?
   headName        String?
   headDesignation String?
 

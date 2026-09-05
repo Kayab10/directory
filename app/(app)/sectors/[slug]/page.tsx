@@ -37,7 +37,7 @@ export default async function SectorDetailPage({ params }: { params: Promise<{ s
   return (
     <div>
       <PageHeader
-        crumbs={[{ label: "Sectors", href: "/" }, { label: sector.name }]}
+        crumbs={[{ label: "Sectors", href: "/sectors" }, { label: sector.name }]}
         title={sector.name}
         subtitle={sector.description ?? undefined}
         actions={
@@ -67,7 +67,7 @@ export default async function SectorDetailPage({ params }: { params: Promise<{ s
           {sector.departments.map((dept) => (
             <div key={dept.id} className="card p-4">
               <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-900/5 text-navy-800">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
                   <Landmark className="h-4.5 w-4.5" />
                 </span>
                 <div className="min-w-0 flex-1">

@@ -6,14 +6,14 @@ const prisma = new PrismaClient();
 const SECTORS = [
   { name: "Agriculture", slug: "agriculture", icon: "Sprout", color: "green", description: "Departments and organisations supporting agriculture, animal husbandry, fisheries and farmer welfare in Madhya Pradesh." },
   { name: "Education", slug: "education", icon: "GraduationCap", color: "blue", description: "Departments and institutions responsible for school, higher and technical education." },
-  { name: "Environment", slug: "environment", icon: "Leaf", color: "emerald", description: "Departments overseeing forests, environment and climate matters." },
-  { name: "Housing", slug: "housing", icon: "Home", color: "amber", description: "Departments responsible for housing and urban development." },
+  { name: "Environment", slug: "environment", icon: "Leaf", color: "teal", description: "Departments overseeing forests, environment and climate matters." },
+  { name: "Housing", slug: "housing", icon: "Home", color: "orange", description: "Departments responsible for housing and urban development." },
   { name: "Governance", slug: "governance", icon: "Landmark", color: "indigo", description: "General administration, revenue and governance departments." },
-  { name: "Social", slug: "social", icon: "Users", color: "rose", description: "Departments responsible for social justice and welfare programmes." },
+  { name: "Social", slug: "social", icon: "Users", color: "pink", description: "Departments responsible for social justice and welfare programmes." },
   { name: "Health", slug: "health", icon: "HeartPulse", color: "red", description: "Departments and institutions responsible for public health, medical education and family welfare services." },
   { name: "Infrastructure", slug: "infrastructure", icon: "Building2", color: "slate", description: "Departments responsible for roads, energy, water and public infrastructure." },
-  { name: "Law Enforcement", slug: "law-enforcement", icon: "ShieldCheck", color: "cyan", description: "Departments responsible for police, home affairs and public safety." },
-  { name: "Others", slug: "others", icon: "MoreHorizontal", color: "violet", description: "Other departments and organisations of the Government of Madhya Pradesh." },
+  { name: "Law Enforcement", slug: "law-enforcement", icon: "ShieldCheck", color: "violet", description: "Departments responsible for police, home affairs and public safety." },
+  { name: "Others", slug: "others", icon: "MoreHorizontal", color: "yellow", description: "Other departments and organisations of the Government of Madhya Pradesh." },
 ];
 
 async function main() {

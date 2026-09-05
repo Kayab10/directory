@@ -35,7 +35,7 @@ export default async function DepartmentDetailPage({ params }: { params: Promise
     <div>
       <PageHeader
         crumbs={[
-          { label: "Sectors", href: "/" },
+          { label: "Sectors", href: "/sectors" },
           { label: dept.sector.name, href: `/sectors/${dept.sector.slug}` },
           ...(dept.parent ? [{ label: dept.parent.name, href: `/departments/${dept.parent.id}` }] : []),
           { label: dept.name },
@@ -70,6 +70,12 @@ export default async function DepartmentDetailPage({ params }: { params: Promise
         <div className="space-y-5 lg:col-span-2">
           <section className="card p-5">
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-400">Department Information</h2>
+            {dept.ministerName && (
+              <div className="mb-3">
+                <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Hon&apos;ble Minister</p>
+                <p className="text-sm font-bold text-red-700">{dept.ministerName}</p>
+              </div>
+            )}
             {dept.officeAddress || dept.website || dept.email || dept.officePhone || dept.mobile ? (
               <ContactActions
                 address={dept.officeAddress}

@@ -66,7 +66,7 @@ export default function SectorForm({
                 type="button"
                 key={opt}
                 onClick={() => setColor(opt)}
-                className={`h-9 w-9 rounded-full ${theme.bar} ${active ? "ring-2 ring-offset-2 ring-navy-800" : ""}`}
+                className={`h-9 w-9 rounded-full ${theme.solid} ${active ? "ring-2 ring-offset-2 ring-navy-800" : ""}`}
                 aria-label={opt}
               />
             );

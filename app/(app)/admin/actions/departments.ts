@@ -51,6 +51,7 @@ function departmentFields(formData: FormData) {
     officeAddress: str(formData.get("officeAddress")),
     mapUrl: str(formData.get("mapUrl")),
     website: str(formData.get("website")),
+    ministerName: str(formData.get("ministerName")),
     headName: str(formData.get("headName")),
     headDesignation: str(formData.get("headDesignation")),
     paName: str(formData.get("paName")),
@@ -68,7 +69,7 @@ export async function createDepartmentAction(formData: FormData) {
 
   const sectorId = String(formData.get("sectorId") || "");
   const parentId = str(formData.get("parentId"));
-  const fallback = parentId ? `/departments/${parentId}` : "/";
+  const fallback = parentId ? `/departments/${parentId}` : "/sectors";
   const fields = departmentFields(formData);
 
   if (!sectorId || !fields.name) redirect(fallback);
@@ -89,6 +90,7 @@ export async function createDepartmentAction(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/sectors");
   revalidatePath(`/sectors/${dept.sector.slug}`);
   revalidatePath("/heads");
   // New parent departments land on the sector page; new sub-organisations
@@ -119,6 +121,7 @@ export async function updateDepartmentAction(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/sectors");
   revalidatePath(`/sectors/${dept.sector.slug}`);
   revalidatePath(`/departments/${id}`);
   revalidatePath("/heads");
@@ -130,7 +133,7 @@ export async function deleteDepartmentAction(formData: FormData) {
   const id = String(formData.get("id") || "");
 
   const dept = await prisma.department.findUnique({ where: { id }, include: { sector: true } });
-  if (!dept) redirect("/");
+  if (!dept) redirect("/sectors");
 
   // The record (and, if it's a parent department, everything under it -
   // sub-departments/boards/corporations/institutions and their contact
@@ -141,6 +144,7 @@ export async function deleteDepartmentAction(formData: FormData) {
   await prisma.department.delete({ where: { id } });
 
   revalidatePath("/");
+  revalidatePath("/sectors");
   revalidatePath(`/sectors/${dept.sector.slug}`);
   revalidatePath(`/departments/${id}`);
   if (dept.parentId) revalidatePath(`/departments/${dept.parentId}`);

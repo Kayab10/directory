@@ -1,91 +1,55 @@
-import Link from "next/link";
-import { LayoutGrid, Building2, Users, Plus, Pencil, Trash2 } from "lucide-react";
+import { Layers, Building2, UserSquare2, Landmark, Headset, Contact } from "lucide-react";
 import { prisma } from "@/lib/db";
-import { getSession } from "@/lib/auth";
-import SectorCard from "@/components/SectorCard";
 import PageHeader from "@/components/PageHeader";
-import QuickSearch from "@/components/QuickSearch";
-import StatChip from "@/components/StatChip";
-import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
-import { deleteSectorAction } from "./admin/actions/sectors";
 
 export const dynamic = "force-dynamic";
 
-export default async function SectorsPage() {
-  const session = await getSession();
-  const isAdmin = session?.role === "DATA_ENTRY";
+const TILES = [
+  { key: "sectors", label: "Sectors", icon: Layers, badgeBg: "bg-emerald-50", iconColor: "text-emerald-600" },
+  { key: "departments", label: "Departments", icon: Building2, badgeBg: "bg-blue-50", iconColor: "text-blue-600" },
+  { key: "heads", label: "Dept. Heads", icon: UserSquare2, badgeBg: "bg-violet-50", iconColor: "text-violet-600" },
+  { key: "organisations", label: "Organizations", icon: Landmark, badgeBg: "bg-orange-50", iconColor: "text-orange-600" },
+  { key: "pa", label: "PA / Assistant", icon: Headset, badgeBg: "bg-teal-50", iconColor: "text-teal-600" },
+  { key: "contacts", label: "Contact Persons", icon: Contact, badgeBg: "bg-pink-50", iconColor: "text-pink-600" },
+] as const;
 
-  const sectors = await prisma.sector.findMany({
-    orderBy: { order: "asc" },
-    include: { _count: { select: { departments: true } } },
-  });
-
-  const [departmentCount, headCount] = await Promise.all([
-    prisma.department.count(),
+export default async function DashboardPage() {
+  const [sectors, departments, heads, organisations, pa, contacts] = await Promise.all([
+    prisma.sector.count(),
+    prisma.department.count({ where: { parentId: null } }),
     prisma.department.count({ where: { headName: { not: null } } }),
+    prisma.department.count({ where: { NOT: { parentId: null } } }),
+    prisma.department.count({ where: { paName: { not: null } } }),
+    prisma.contactPerson.count(),
   ]);
+
+  const values: Record<(typeof TILES)[number]["key"], number> = {
+    sectors,
+    departments,
+    heads,
+    organisations,
+    pa,
+    contacts,
+  };
 
   return (
     <div>
-      <PageHeader
-        title="Sectors"
-        subtitle="Browse departments and organisations by sector, Government of Madhya Pradesh."
-        actions={
-          isAdmin ? (
-            <Link href="/admin/sectors/new" className="btn-primary btn-sm">
-              <Plus className="h-3.5 w-3.5" /> Add Sector
-            </Link>
-          ) : undefined
-        }
-      />
+      <PageHeader title="Dashboard" subtitle="Government of Madhya Pradesh directory overview" />
 
-      <div className="mb-6">
-        <QuickSearch />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {TILES.map((tile) => {
+          const Icon = tile.icon;
+          return (
+            <div key={tile.key} className="card p-5">
+              <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${tile.badgeBg} ${tile.iconColor}`}>
+                <Icon className="h-5 w-5" />
+              </div>
+              <p className="text-2xl font-bold text-navy-900">{values[tile.key]}</p>
+              <p className="text-sm text-slate-500">{tile.label}</p>
+            </div>
+          );
+        })}
       </div>
-
-      <div className="mb-6 flex flex-wrap gap-2">
-        <StatChip icon={LayoutGrid} label="Sectors" value={sectors.length} />
-        <StatChip icon={Building2} label="Departments" value={departmentCount} />
-        <StatChip icon={Users} label="Dept. Heads" value={headCount} />
-      </div>
-
-      {sectors.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-          No sectors have been added yet.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {sectors.map((sector) => (
-            <SectorCard
-              key={sector.id}
-              slug={sector.slug}
-              name={sector.name}
-              description={sector.description}
-              icon={sector.icon}
-              color={sector.color}
-              departmentCount={sector._count.departments}
-              actions={
-                isAdmin ? (
-                  <>
-                    <Link href={`/admin/sectors/${sector.id}/edit`} className="btn-secondary btn-sm">
-                      <Pencil className="h-3.5 w-3.5" /> Modify
-                    </Link>
-                    <form action={deleteSectorAction}>
-                      <input type="hidden" name="id" value={sector.id} />
-                      <ConfirmSubmitButton
-                        className="btn-danger btn-sm"
-                        confirmMessage={`Delete "${sector.name}" and ALL its departments, sub-departments and contact persons? This cannot be undone.`}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" /> Delete
-                      </ConfirmSubmitButton>
-                    </form>
-                  </>
-                ) : undefined
-              }
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }

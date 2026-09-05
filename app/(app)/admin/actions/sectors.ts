@@ -32,7 +32,7 @@ export async function createSectorAction(formData: FormData) {
   await requireDataEntry();
 
   const name = String(formData.get("name") || "").trim();
-  if (!name) redirect("/");
+  if (!name) redirect("/sectors");
 
   const icon = SECTOR_ICON_OPTIONS.includes(String(formData.get("icon"))) ? String(formData.get("icon")) : "Layers";
   const color = SECTOR_COLOR_OPTIONS.includes(String(formData.get("color"))) ? String(formData.get("color")) : "blue";
@@ -45,7 +45,8 @@ export async function createSectorAction(formData: FormData) {
   });
 
   revalidatePath("/");
-  redirect("/");
+  revalidatePath("/sectors");
+  redirect("/sectors");
 }
 
 export async function updateSectorAction(formData: FormData) {
@@ -53,14 +54,14 @@ export async function updateSectorAction(formData: FormData) {
 
   const id = String(formData.get("id"));
   const name = String(formData.get("name") || "").trim();
-  if (!id || !name) redirect("/");
+  if (!id || !name) redirect("/sectors");
 
   const icon = SECTOR_ICON_OPTIONS.includes(String(formData.get("icon"))) ? String(formData.get("icon")) : "Layers";
   const color = SECTOR_COLOR_OPTIONS.includes(String(formData.get("color"))) ? String(formData.get("color")) : "blue";
   const description = str(formData.get("description"));
 
   const existing = await prisma.sector.findUnique({ where: { id } });
-  if (!existing) redirect("/");
+  if (!existing) redirect("/sectors");
 
   const slug = name === existing.name ? existing.slug : await uniqueSlug(name, id);
 
@@ -70,6 +71,7 @@ export async function updateSectorAction(formData: FormData) {
   });
 
   revalidatePath("/");
+  revalidatePath("/sectors");
   revalidatePath(`/sectors/${existing.slug}`);
   revalidatePath(`/sectors/${slug}`);
   redirect(`/sectors/${slug}`);
@@ -79,14 +81,15 @@ export async function deleteSectorAction(formData: FormData) {
   await requireDataEntry();
   const id = String(formData.get("id"));
   const sector = await prisma.sector.findUnique({ where: { id } });
-  if (!sector) redirect("/");
+  if (!sector) redirect("/sectors");
 
   // Cascades in the database: every department in this sector (and their
   // sub-departments and contact persons) is deleted along with it.
   await prisma.sector.delete({ where: { id } });
 
   revalidatePath("/");
+  revalidatePath("/sectors");
   revalidatePath(`/sectors/${sector.slug}`);
   revalidatePath("/heads");
-  redirect("/");
+  redirect("/sectors");
 }

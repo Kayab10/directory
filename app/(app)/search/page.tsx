@@ -123,7 +123,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
               <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-400">Sectors</h2>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {sectors.map((s) => (
-                  <SectorCard key={s.id} slug={s.slug} name={s.name} description={s.description} icon={s.icon} color={s.color} />
+                  <SectorCard key={s.id} slug={s.slug} name={s.name} description={s.description} color={s.color} />
                 ))}
               </div>
             </section>

@@ -10,7 +10,7 @@ export default async function NewSectorPage() {
 
   return (
     <div>
-      <PageHeader crumbs={[{ label: "Sectors", href: "/" }]} title="Add Sector" />
+      <PageHeader crumbs={[{ label: "Sectors", href: "/sectors" }]} title="Add Sector" />
       <SectorForm action={createSectorAction} />
     </div>
   );

@@ -32,6 +32,7 @@ export default function DepartmentForm({
     officeAddress?: string | null;
     mapUrl?: string | null;
     website?: string | null;
+    ministerName?: string | null;
     headName?: string | null;
     headDesignation?: string | null;
     paName?: string | null;
@@ -130,10 +131,16 @@ export default function DepartmentForm({
       </section>
 
       <section className="card space-y-4 p-5">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Head of Organisation</h2>
+        <h2 className="text-sm font-bold uppercase tracking-wide text-slate-400">Head of Department</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {!isSub && (
+            <div>
+              <label className="field-label">Hon&apos;ble Minister Name</label>
+              <input name="ministerName" defaultValue={initial?.ministerName ?? ""} className="field-input" placeholder="Shri / Smt. ..." />
+            </div>
+          )}
           <div>
-            <label className="field-label">Name</label>
+            <label className="field-label">{isSub ? "Head / Officer Name" : "Head of Department Name"}</label>
             <input name="headName" defaultValue={initial?.headName ?? ""} className="field-input" placeholder="Shri / Smt. ..." />
           </div>
           <div>

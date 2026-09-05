@@ -17,7 +17,7 @@ export default async function EditSectorPage({ params }: { params: Promise<{ id:
   return (
     <div>
       <PageHeader
-        crumbs={[{ label: "Sectors", href: "/" }, { label: sector.name, href: `/sectors/${sector.slug}` }]}
+        crumbs={[{ label: "Sectors", href: "/sectors" }, { label: sector.name, href: `/sectors/${sector.slug}` }]}
         title={`Edit: ${sector.name}`}
       />
       <SectorForm action={updateSectorAction} id={sector.id} initial={sector} />
