@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { OrgType } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { requireDataEntry } from "@/lib/session-helpers";
+import { PARENT_ORG_TYPE } from "@/lib/org-type";
 
 function str(v: FormDataEntryValue | null) {
   const s = v ? String(v).trim() : "";
@@ -15,8 +15,6 @@ function safePath(v: FormDataEntryValue | null, fallback: string) {
   const s = v ? String(v) : "";
   return s.startsWith("/") ? s : fallback;
 }
-
-const VALID_ORG_TYPES = new Set(Object.values(OrgType));
 
 function contactsFromForm(formData: FormData) {
   const names = formData.getAll("contact_name").map(String);
@@ -42,8 +40,7 @@ function contactsFromForm(formData: FormData) {
 }
 
 function departmentFields(formData: FormData) {
-  const orgTypeRaw = String(formData.get("orgType") || "PARENT_DEPARTMENT");
-  const orgType = (VALID_ORG_TYPES.has(orgTypeRaw as OrgType) ? orgTypeRaw : "PARENT_DEPARTMENT") as OrgType;
+  const orgType = str(formData.get("orgType")) ?? PARENT_ORG_TYPE;
 
   return {
     name: String(formData.get("name") || "").trim(),

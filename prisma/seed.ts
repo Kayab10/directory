@@ -1,4 +1,4 @@
-import { PrismaClient, OrgType, Role } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -51,23 +51,23 @@ async function main() {
     data: {
       sectorId: agri,
       name: "Department of Animal Husbandry & Dairying",
-      orgType: OrgType.PARENT_DEPARTMENT,
+      orgType: "Parent Department",
       order: 0,
     },
   });
-  for (const [i, name] of [
-    "MP State Livestock and Poultry Development Corporation",
-    "M.P. Gausamvardhan Board",
-    "Madhya Pradesh State Cooperative Dairy Federation (MPCDF)",
-    "National Dairy Development Board (NDDB)",
-    "Nanaji Deshmukh Veterinary Science University, Jabalpur",
+  for (const [i, [name, orgType]] of [
+    ["MP State Livestock and Poultry Development Corporation", "Corporation"],
+    ["M.P. Gausamvardhan Board", "Board"],
+    ["Madhya Pradesh State Cooperative Dairy Federation (MPCDF)", "Federation"],
+    ["National Dairy Development Board (NDDB)", "Board"],
+    ["Nanaji Deshmukh Veterinary Science University, Jabalpur", "University"],
   ].entries()) {
     await prisma.department.create({
       data: {
         sectorId: agri,
         parentId: animalHusbandry.id,
         name,
-        orgType: OrgType.CORPORATION,
+        orgType,
         order: i,
       },
     });
@@ -77,7 +77,7 @@ async function main() {
     data: {
       sectorId: agri,
       name: "Farmer Welfare & Agriculture Development Department",
-      orgType: OrgType.PARENT_DEPARTMENT,
+      orgType: "Parent Department",
       order: 1,
     },
   });
@@ -95,7 +95,7 @@ async function main() {
         sectorId: agri,
         parentId: farmerWelfare.id,
         name,
-        orgType: OrgType.SUB_DEPARTMENT,
+        orgType: "Sub Department",
         order: i,
       },
     });
@@ -105,7 +105,7 @@ async function main() {
     data: {
       sectorId: agri,
       name: "Fisherman Welfare & Fisheries Development Department",
-      orgType: OrgType.PARENT_DEPARTMENT,
+      orgType: "Parent Department",
       order: 2,
     },
   });
@@ -114,7 +114,7 @@ async function main() {
       sectorId: agri,
       parentId: fisherman.id,
       name: "M.P. Fish Federation (Cooperative) Limited",
-      orgType: OrgType.SUB_DEPARTMENT,
+      orgType: "Federation",
       order: 0,
     },
   });
@@ -125,7 +125,7 @@ async function main() {
     data: {
       sectorId: edu,
       name: "Department of Technical Education, Skill Development & Employment",
-      orgType: OrgType.PARENT_DEPARTMENT,
+      orgType: "Parent Department",
       officeAddress: "Vallabh Bhawan II, First Floor, Bhopal",
       headName: "Shri Manish Singh",
       headDesignation: "Principal Secretary",

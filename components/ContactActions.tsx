@@ -1,7 +1,7 @@
 import { Phone, Smartphone, Mail, MapPin, Globe } from "lucide-react";
 import ActionPill from "./ActionPill";
 
-function mapsUrl(address: string) {
+export function mapsUrl(address: string) {
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
 }
 

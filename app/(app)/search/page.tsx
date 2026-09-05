@@ -4,7 +4,6 @@ import PageHeader from "@/components/PageHeader";
 import QuickSearch from "@/components/QuickSearch";
 import ContactActions from "@/components/ContactActions";
 import SectorCard from "@/components/SectorCard";
-import { ORG_TYPE_LABELS } from "@/lib/org-type";
 
 export const dynamic = "force-dynamic";
 
@@ -69,7 +68,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
     byId.set(d.id, {
       id: d.id,
       name: d.name,
-      designation: d.headDesignation ? `${d.headDesignation}${d.headName ? ` — ${d.headName}` : ""}` : ORG_TYPE_LABELS[d.orgType],
+      designation: d.headDesignation ? `${d.headDesignation}${d.headName ? ` — ${d.headName}` : ""}` : d.orgType,
       sectorName: d.sector.name,
       breadcrumb: d.parent ? `${d.sector.name} / ${d.parent.name}` : d.sector.name,
       officeAddress: d.officeAddress,
@@ -85,7 +84,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
       byId.set(d.id, {
         id: d.id,
         name: d.name,
-        designation: ORG_TYPE_LABELS[d.orgType],
+        designation: d.orgType,
         sectorName: d.sector.name,
         breadcrumb: d.parent ? `${d.sector.name} / ${d.parent.name}` : d.sector.name,
         officeAddress: d.officeAddress,

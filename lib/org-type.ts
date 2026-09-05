@@ -1,16 +1,17 @@
-import type { OrgType } from "@prisma/client";
+// Organisation type is free text (e.g. "Board", "Corporation", "Federation",
+// "University") rather than a fixed enum, since real departments use all
+// sorts of institutional labels. This list only powers the datalist
+// autocomplete suggestions on the form - any value can be typed.
+export const ORG_TYPE_SUGGESTIONS = [
+  "Sub Department",
+  "Board",
+  "Corporation",
+  "Institution",
+  "Federation",
+  "University",
+  "Society",
+  "Council",
+  "Authority",
+];
 
-export const ORG_TYPE_LABELS: Record<OrgType, string> = {
-  PARENT_DEPARTMENT: "Parent Department",
-  SUB_DEPARTMENT: "Sub Department",
-  BOARD: "Board",
-  CORPORATION: "Corporation",
-  INSTITUTION: "Institution",
-};
-
-export const ORG_TYPE_OPTIONS: OrgType[] = [
-  "SUB_DEPARTMENT",
-  "BOARD",
-  "CORPORATION",
-  "INSTITUTION",
-] as OrgType[];
+export const PARENT_ORG_TYPE = "Parent Department";

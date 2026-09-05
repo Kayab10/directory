@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import ContactPersonsEditor from "./ContactPersonsEditor";
-import { ORG_TYPE_LABELS, ORG_TYPE_OPTIONS } from "@/lib/org-type";
-import type { OrgType } from "@prisma/client";
+import { ORG_TYPE_SUGGESTIONS, PARENT_ORG_TYPE } from "@/lib/org-type";
 
 type SectorOption = { id: string; name: string };
 
@@ -25,7 +24,7 @@ export default function DepartmentForm({
   sectorId?: string;
   parentId?: string | null;
   parentName?: string | null;
-  orgType?: OrgType;
+  orgType?: string;
   redirectTo: string;
   initial?: {
     name?: string;
@@ -46,7 +45,6 @@ export default function DepartmentForm({
   initialContacts?: { name: string; designation: string; mobile: string; email: string }[];
 }) {
   const isSub = Boolean(parentId);
-  const [selectedOrgType, setSelectedOrgType] = useState<OrgType>(orgType ?? (isSub ? "SUB_DEPARTMENT" : "PARENT_DEPARTMENT"));
 
   return (
     <form action={action} className="space-y-6">
@@ -89,22 +87,24 @@ export default function DepartmentForm({
           <div>
             <label className="field-label">Organisation Type</label>
             {isSub ? (
-              <select
-                name="orgType"
-                value={selectedOrgType}
-                onChange={(e) => setSelectedOrgType(e.target.value as OrgType)}
-                className="field-input"
-              >
-                {ORG_TYPE_OPTIONS.map((t) => (
-                  <option key={t} value={t}>
-                    {ORG_TYPE_LABELS[t]}
-                  </option>
-                ))}
-              </select>
+              <>
+                <input
+                  name="orgType"
+                  list="org-type-suggestions"
+                  defaultValue={orgType ?? "Board"}
+                  className="field-input"
+                  placeholder="e.g. Board, Corporation, Federation, University"
+                />
+                <datalist id="org-type-suggestions">
+                  {ORG_TYPE_SUGGESTIONS.map((t) => (
+                    <option key={t} value={t} />
+                  ))}
+                </datalist>
+              </>
             ) : (
-              <input disabled value="Parent Department" className="field-input bg-slate-50 text-slate-400" />
+              <input disabled value={PARENT_ORG_TYPE} className="field-input bg-slate-50 text-slate-400" />
             )}
-            {!isSub && <input type="hidden" name="orgType" value="PARENT_DEPARTMENT" />}
+            {!isSub && <input type="hidden" name="orgType" value={PARENT_ORG_TYPE} />}
           </div>
         </div>
 

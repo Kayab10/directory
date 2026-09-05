@@ -13,14 +13,6 @@ enum Role {
   GENERAL
 }
 
-enum OrgType {
-  PARENT_DEPARTMENT
-  SUB_DEPARTMENT
-  BOARD
-  CORPORATION
-  INSTITUTION
-}
-
 model User {
   id           String   @id @default(cuid())
   username     String   @unique
@@ -56,8 +48,10 @@ model Department {
   parentId String?
   children Department[] @relation("DeptHierarchy")
 
-  name    String
-  orgType OrgType @default(PARENT_DEPARTMENT)
+  name String
+  // Free text (e.g. "Board", "Corporation", "Federation", "University") for
+  // sub-organisations; "Parent Department" for top-level departments.
+  orgType String @default("Parent Department")
 
   officeAddress String?
   mapUrl        String?
