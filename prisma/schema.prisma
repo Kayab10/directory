@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  DATA_ENTRY
+  GENERAL
+}
+
+enum OrgType {
+  PARENT_DEPARTMENT
+  SUB_DEPARTMENT
+  BOARD
+  CORPORATION
+  INSTITUTION
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Sector {
+  id          String       @id @default(cuid())
+  name        String
+  slug        String       @unique
+  description String?
+  icon        String       @default("Layers")
+  color       String       @default("blue")
+  order       Int          @default(0)
+  departments Department[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Department {
+  id     String @id @default(cuid())
+  sector Sector @relation(fields: [sectorId], references: [id], onDelete: Cascade)
+  sectorId String
+
+  // Deleting a parent department cascades to its sub-departments/boards/
+  // corporations/institutions, and (via ContactPerson's own cascade) to
+  // their contact persons. Deleting a sector cascades through sectorId to
+  // every department in it, which in turn cascades to their children.
+  parent   Department?  @relation("DeptHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  parentId String?
+  children Department[] @relation("DeptHierarchy")
+
+  name    String
+  orgType OrgType @default(PARENT_DEPARTMENT)
+
+  officeAddress String?
+  mapUrl        String?
+  website       String?
+
+  headName        String?
+  headDesignation String?
+
+  paName   String?
+  paPhone  String?
+  paEmail  String?
+  paMobile String?
+
+  officePhone String?
+  email       String?
+  mobile      String?
+
+  order Int @default(0)
+
+  contacts ContactPerson[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sectorId])
+  @@index([parentId])
+}
+
+model ContactPerson {
+  id           String     @id @default(cuid())
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  departmentId String
+  name         String
+  designation  String?
+  mobile       String?
+  email        String?
+  order        Int        @default(0)
+
+  @@index([departmentId])
+}
