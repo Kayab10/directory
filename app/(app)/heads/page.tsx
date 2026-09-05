@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Search, ChevronRight } from "lucide-react";
 import { prisma } from "@/lib/db";
 import PageHeader from "@/components/PageHeader";
-import InfoRow from "@/components/InfoRow";
+import ContactActions from "@/components/ContactActions";
 
 export const dynamic = "force-dynamic";
 
@@ -71,12 +71,17 @@ export default async function DepartmentHeadsPage({ searchParams }: { searchPara
                   View profile <ChevronRight className="h-4 w-4" />
                 </Link>
               </div>
-              <div className="mt-3 grid grid-cols-1 gap-x-6 border-t border-slate-100 pt-3 sm:grid-cols-2">
-                <InfoRow kind="address" label="Office Address" value={dept.officeAddress} />
-                <InfoRow kind="email" label="Email" value={dept.email} />
-                <InfoRow kind="phone" label="Office Phone" value={dept.officePhone} />
-                <InfoRow kind="mobile" label="Mobile" value={dept.mobile} />
-              </div>
+              {(dept.officeAddress || dept.email || dept.officePhone || dept.mobile) && (
+                <div className="mt-3 border-t border-slate-100 pt-3">
+                  <ContactActions
+                    address={dept.officeAddress}
+                    addressLabel="Office Address"
+                    phone={dept.officePhone}
+                    mobile={dept.mobile}
+                    email={dept.email}
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

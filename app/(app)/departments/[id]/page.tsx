@@ -4,7 +4,7 @@ import { Pencil, Trash2, Plus, Building2, ChevronRight, Globe } from "lucide-rea
 import { prisma } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import PageHeader from "@/components/PageHeader";
-import InfoRow from "@/components/InfoRow";
+import ContactActions from "@/components/ContactActions";
 import PersonCard from "@/components/PersonCard";
 import ConfirmSubmitButton from "@/components/ConfirmSubmitButton";
 import { ORG_TYPE_LABELS } from "@/lib/org-type";
@@ -70,12 +70,16 @@ export default async function DepartmentDetailPage({ params }: { params: Promise
         <div className="space-y-5 lg:col-span-2">
           <section className="card p-5">
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-slate-400">Department Information</h2>
-            <InfoRow kind="address" label="Office Address" value={dept.officeAddress} />
-            <InfoRow kind="website" label="Website" value={dept.website} />
-            <InfoRow kind="email" label="Email" value={dept.email} />
-            <InfoRow kind="phone" label="Office Phone" value={dept.officePhone} />
-            <InfoRow kind="mobile" label="Mobile" value={dept.mobile} />
-            {!dept.officeAddress && !dept.website && !dept.email && !dept.officePhone && !dept.mobile && (
+            {dept.officeAddress || dept.website || dept.email || dept.officePhone || dept.mobile ? (
+              <ContactActions
+                address={dept.officeAddress}
+                addressLabel="Office Address"
+                phone={dept.officePhone}
+                mobile={dept.mobile}
+                email={dept.email}
+                website={dept.website}
+              />
+            ) : (
               <p className="text-sm text-slate-400">No department contact details have been added yet.</p>
             )}
           </section>

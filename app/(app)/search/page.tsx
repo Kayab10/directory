@@ -2,7 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/db";
 import PageHeader from "@/components/PageHeader";
 import QuickSearch from "@/components/QuickSearch";
-import InfoRow from "@/components/InfoRow";
+import ContactActions from "@/components/ContactActions";
 import SectorCard from "@/components/SectorCard";
 import { ORG_TYPE_LABELS } from "@/lib/org-type";
 
@@ -152,12 +152,17 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
                       </div>
                     )}
 
-                    <div className="mt-3 grid grid-cols-1 gap-x-6 border-t border-slate-100 pt-3 sm:grid-cols-2">
-                      <InfoRow kind="address" label="Office Address" value={r.officeAddress} />
-                      <InfoRow kind="email" label="Email" value={r.email} />
-                      <InfoRow kind="phone" label="Office Phone" value={r.phone} />
-                      <InfoRow kind="mobile" label="Mobile" value={r.mobile} />
-                    </div>
+                    {(r.officeAddress || r.email || r.phone || r.mobile) && (
+                      <div className="mt-3 border-t border-slate-100 pt-3">
+                        <ContactActions
+                          address={r.officeAddress}
+                          addressLabel="Office Address"
+                          phone={r.phone}
+                          mobile={r.mobile}
+                          email={r.email}
+                        />
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

@@ -8,3 +8,4 @@ out
 dev.db
 dev.db-journal
 *.tsbuildinfo
+.claude/scheduled_tasks.lock

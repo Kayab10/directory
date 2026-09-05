@@ -1,5 +1,5 @@
 import { UserCircle2 } from "lucide-react";
-import InfoRow from "./InfoRow";
+import ContactActions from "./ContactActions";
 
 export default function PersonCard({
   name,
@@ -33,10 +33,8 @@ export default function PersonCard({
         {actions}
       </div>
       {(email || phone || mobile) && (
-        <div className="mt-3 space-y-0.5 border-t border-slate-100 pt-3">
-          <InfoRow kind="email" label="Email" value={email} />
-          <InfoRow kind="phone" label="Office Phone" value={phone} />
-          <InfoRow kind="mobile" label="Mobile" value={mobile} />
+        <div className="mt-3 border-t border-slate-100 pt-3">
+          <ContactActions phone={phone} mobile={mobile} email={email} />
         </div>
       )}
     </div>
